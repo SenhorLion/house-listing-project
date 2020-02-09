@@ -1,24 +1,24 @@
-import { IResolvers } from "apollo-server-express";
-import { listings } from "../listings";
+import { IResolvers } from 'apollo-server-express';
+import { listings } from '../listings';
 
 // A copy of [listings] so we can mutate it in memory
 let filteredListings = [...listings];
 
 export const resolvers: IResolvers = {
   Query: {
-    listings: () => filteredListings
+    listings: () => filteredListings,
   },
   Mutation: {
     deleteListing: (_root: undefined, { id }: { id: string }) => {
-      const listing = filteredListings.find(item => item.id === id);
+      const listing = filteredListings.find(item => item._id === id);
 
       if (!listing) {
-        throw new Error("Failed to find listing");
+        throw new Error('Failed to find listing');
       }
       // remove from listings
-      filteredListings = filteredListings.filter(item => item.id !== id);
+      filteredListings = filteredListings.filter(item => item._id !== id);
 
       return listing;
-    }
-  }
+    },
+  },
 };
