@@ -1,7 +1,7 @@
 import { Collection, ObjectId } from 'mongodb';
 
 export interface IListing {
-  _id: string; //ObjectId;
+  _id: ObjectId;
   title: string;
   image: string;
   address: string;
