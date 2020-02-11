@@ -18,6 +18,7 @@ if (process.env.NODE_ENV == 'LOCAL') {
 
 console.log('=====\nConfig for', process.env.NODE_ENV);
 console.log('DB: ', dbName);
+console.log('DB_COLLECTION: ', dbCollection);
 
 export const connectDatabase = async (): Promise<IDatabase> => {
   const client = await MongoClient.connect(url, {
