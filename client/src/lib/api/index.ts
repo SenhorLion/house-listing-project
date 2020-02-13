@@ -1,1 +1,1 @@
-export const server = () => {};
+export * from "./server";
