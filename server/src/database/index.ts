@@ -11,7 +11,7 @@ let dbName = `${DB_NAME}`;
 let url = '';
 url = `mongodb+srv://${DB_USER}:${DB_USER_PASSWORD}@${DB_CLUSTER}.mongodb.net/test?retryWrites=true&w=majority`;
 
-if (process.env.NODE_ENV == 'LOCAL') {
+if (process.env.NODE_ENV === 'LOCAL') {
   url = `${LOCAL_MONGO_URL}`;
   dbName = `${LOCAL_DB_NAME}`;
 }
