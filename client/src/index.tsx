@@ -4,7 +4,7 @@ import "./index.css";
 import { Listings } from "./sections";
 import * as serviceWorker from "./serviceWorker";
 
-ReactDOM.render(<Listings title="Housey" />, document.getElementById("root"));
+ReactDOM.render(<Listings title="TinyHouse" />, document.getElementById("root"));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
