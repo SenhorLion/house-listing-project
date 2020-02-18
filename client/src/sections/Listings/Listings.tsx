@@ -1,6 +1,7 @@
 import React, { FunctionComponent, useState, useEffect } from "react";
 import { server } from "../../lib/api";
 import {
+  Listing,
   ListingsData,
   DeleteListingVariables,
   DeleteListingData
@@ -33,57 +34,63 @@ interface IProps {
 }
 
 export const Listings: FunctionComponent<IProps> = ({ title }: IProps) => {
-  const [listingsState, setListingsState] = useState<ListingsData>({listings: []});
-  
+  const [listings, setListings] = useState<Listing[] | null>(null);
+
   const fetchListings = async () => {
     const { data } = await server.fetch<ListingsData>({ query: LISTINGS });
-    console.log("fetchListings", { data });
+    console.log("fetchListings", data.listings);
 
-    setListingsState(data);
+    setListings(data.listings);
     return data;
   };
 
-  const deleteListings = async () => {
+  const deleteListings = async (id: string) => {
     try {
       const { data } = await server.fetch<
-      DeleteListingData,
-      DeleteListingVariables
-    >({
-      query: DELETE_LISTING,
-      variables: {
-        id: "5e48554611650099050ac819"
-      }
-    });
+        DeleteListingData,
+        DeleteListingVariables
+      >({
+        query: DELETE_LISTING,
+        variables: {
+          id
+        }
+      });
 
-    console.log("@deleteListings", { data });
+      console.log("@deleteListings", { data });
 
-    fetchListings();
+      fetchListings();
     } catch (error) {
-      console.log('Error', error)
+      console.log("Error", error);
     }
-    
   };
+
+  const listingsList =
+    listings && listings.length ? (
+      <ul>
+        {listings.map(({ id, title }) => (
+          <li key={id}>
+            {`${id}: ${title}`}
+            <button onClick={() => deleteListings(id)}>Delete Listing</button>
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <div>
+        <p>No Listings to show</p>
+      </div>
+    );
 
   useEffect(() => {
     fetchListings();
-  }, [])
+  }, []);
 
   return (
     <div>
       <h2>{title}</h2>
-      <button onClick={fetchListings}>Query Listings</button>
-      <button onClick={deleteListings}>Delete Listing</button>
-
       <div>
         <h2>Listings</h2>
-        {listingsState && listingsState.listings && listingsState.listings.length ? (
-        <ul>{
-        listingsState.listings.map(({id, title}) => <li key={id}>{`${id}: ${title}`}</li>)
-          }
-          </ul>
-        ) : (
-          <div><p>No Listings to show</p></div>
-        )}
+
+        {listingsList}
       </div>
     </div>
   );
