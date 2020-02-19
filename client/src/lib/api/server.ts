@@ -3,6 +3,10 @@ interface Body<TVariables> {
   variables?: TVariables;
 }
 
+interface Error {
+  message: string;
+}
+
 /**
  * @server - Wraps a fetch request
  * TData: shapes the type of data returned from a request
@@ -18,6 +22,10 @@ export const server = {
       body: JSON.stringify(body)
     });
 
-    return res.json() as Promise<{ data: TData }>;
+    if (!res.ok) {
+      throw new Error(`Failed to fetch from server with status: ${res.status}`);
+    }
+
+    return res.json() as Promise<{ data: TData; errors: Error[] }>;
   }
 };

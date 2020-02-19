@@ -1,7 +1,6 @@
-import React, { FunctionComponent, useState, useEffect } from "react";
-import { server } from "../../lib/api";
+import React, { FunctionComponent } from "react";
+import { useQuery, server } from "../../lib/api";
 import {
-  Listing,
   ListingsData,
   DeleteListingVariables,
   DeleteListingData
@@ -34,15 +33,7 @@ interface IProps {
 }
 
 export const Listings: FunctionComponent<IProps> = ({ title }: IProps) => {
-  const [listings, setListings] = useState<Listing[] | null>(null);
-
-  const fetchListings = async () => {
-    const { data } = await server.fetch<ListingsData>({ query: LISTINGS });
-    console.log("fetchListings", data.listings);
-
-    setListings(data.listings);
-    return data;
-  };
+  const { data, loading, refetch, error } = useQuery<ListingsData>(LISTINGS);
 
   const deleteListings = async (id: string) => {
     try {
@@ -57,12 +48,13 @@ export const Listings: FunctionComponent<IProps> = ({ title }: IProps) => {
       });
 
       console.log("@deleteListings", { data });
-
-      fetchListings();
+      refetch();
     } catch (error) {
       console.log("Error", error);
     }
   };
+
+  const listings = data ? data.listings : null;
 
   const listingsList =
     listings && listings.length ? (
@@ -80,9 +72,13 @@ export const Listings: FunctionComponent<IProps> = ({ title }: IProps) => {
       </div>
     );
 
-  useEffect(() => {
-    fetchListings();
-  }, []);
+  if (loading) {
+    return <h2>Loading...</h2>;
+  }
+
+  if (error) {
+    return <h2>An Error occcured fetching data, please try again...</h2>;
+  }
 
   return (
     <div>
