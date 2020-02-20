@@ -10,15 +10,15 @@ export const listingResolvers: IResolvers = {
   },
   Mutation: {
     deleteListing: async (_root: undefined, { id }: { id: string }, { db }: { db: IDatabase }): Promise<IListing> => {
-      const deleteReult = await db.listings.findOneAndDelete({
+      const deleteResult = await db.listings.findOneAndDelete({
         _id: new ObjectId(id),
       });
 
-      if (!deleteReult.value) {
+      if (!deleteResult.value) {
         throw new Error('Failed to delete listing');
       }
 
-      return deleteReult.value;
+      return deleteResult.value;
     },
   },
   Listing: {

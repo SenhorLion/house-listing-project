@@ -1,9 +1,9 @@
 import React, { FunctionComponent } from "react";
-import { useQuery, server } from "../../lib/api";
+import { useQuery, useMutation } from "../../lib/api";
 import {
   ListingsData,
-  DeleteListingVariables,
-  DeleteListingData
+  DeleteListingData,
+  DeleteListingVariables
 } from "./types";
 
 const LISTINGS = `
@@ -35,19 +35,16 @@ interface IProps {
 export const Listings: FunctionComponent<IProps> = ({ title }: IProps) => {
   const { data, loading, refetch, error } = useQuery<ListingsData>(LISTINGS);
 
-  const deleteListings = async (id: string) => {
-    try {
-      const { data } = await server.fetch<
-        DeleteListingData,
-        DeleteListingVariables
-      >({
-        query: DELETE_LISTING,
-        variables: {
-          id
-        }
-      });
+  const [
+    deleteListing,
+    { loading: deleteListingLoading, error: deleteListingError }
+  ] = useMutation<DeleteListingData, DeleteListingVariables>(DELETE_LISTING);
 
-      console.log("@deleteListings", { data });
+  const handleDeleteListing = async (id: string) => {
+    try {
+      await deleteListing({ id });
+
+      console.log("@handleDeleteListing", { id });
       refetch();
     } catch (error) {
       console.log("Error", error);
@@ -62,7 +59,9 @@ export const Listings: FunctionComponent<IProps> = ({ title }: IProps) => {
         {listings.map(({ id, title }) => (
           <li key={id}>
             {`${id}: ${title}`}
-            <button onClick={() => deleteListings(id)}>Delete Listing</button>
+            <button onClick={() => handleDeleteListing(id)}>
+              Delete Listing
+            </button>
           </li>
         ))}
       </ul>
@@ -80,6 +79,14 @@ export const Listings: FunctionComponent<IProps> = ({ title }: IProps) => {
     return <h2>An Error occcured fetching data, please try again...</h2>;
   }
 
+  const deleteListingLoadingMessage = deleteListingLoading ? (
+    <h4>Deletion in progress...</h4>
+  ) : null;
+
+  const deleteListingErrorMessage = deleteListingError ? (
+    <h4>Deletion error, please try again.</h4>
+  ) : null;
+
   return (
     <div>
       <h2>{title}</h2>
@@ -87,6 +94,8 @@ export const Listings: FunctionComponent<IProps> = ({ title }: IProps) => {
         <h2>Listings</h2>
 
         {listingsList}
+        {deleteListingLoadingMessage}
+        {deleteListingErrorMessage}
       </div>
     </div>
   );
