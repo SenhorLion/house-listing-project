@@ -27,13 +27,10 @@ type Action<TData> =
 const reducer = <TData>() => (state: State<TData>, action: Action<TData>) => {
   switch (action.type) {
     case "FETCH":
-      console.log("FETCHY MUTATION");
       return { ...state, loading: true };
     case "FETCH_SUCCESS":
-      console.log("FETCH_SUCCESS");
       return { data: action.payload, loading: false, error: false };
     case "FETCH_ERROR":
-      console.log("FETCH_ERROR");
       return { ...state, loading: false, error: true };
     default:
       throw new Error();
