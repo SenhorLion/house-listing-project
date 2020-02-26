@@ -1,12 +1,14 @@
 import React, { FunctionComponent } from "react";
-import { useQuery, useMutation } from "../../lib/api";
+import { gql } from "apollo-boost";
+import { useQuery, useMutation } from "@apollo/react-hooks";
+// import { useQuery, useMutation } from "../../lib/api";
 import {
   ListingsData,
   DeleteListingData,
   DeleteListingVariables
 } from "./types";
 
-const LISTINGS = `
+const LISTINGS = gql`
   query Listings {
     listings {
       id
@@ -22,18 +24,19 @@ const LISTINGS = `
   }
 `;
 
-const DELETE_LISTING = `
- mutation DeleteListing($id: ID!) {
-   deleteListing(id: $id) {
-     id
-   }
- }`;
+const DELETE_LISTING = gql`
+  mutation DeleteListing($id: ID!) {
+    deleteListing(id: $id) {
+      id
+    }
+  }
+`;
 interface IProps {
   title: string;
 }
 
 export const Listings: FunctionComponent<IProps> = ({ title }: IProps) => {
-  const { data, loading, refetch, error } = useQuery<ListingsData>(LISTINGS);
+  const { data, loading, error, refetch } = useQuery<ListingsData>(LISTINGS);
 
   const [
     deleteListing,
@@ -41,14 +44,10 @@ export const Listings: FunctionComponent<IProps> = ({ title }: IProps) => {
   ] = useMutation<DeleteListingData, DeleteListingVariables>(DELETE_LISTING);
 
   const handleDeleteListing = async (id: string) => {
-    try {
-      await deleteListing({ id });
+    await deleteListing({ variables: { id } });
 
-      console.log("@handleDeleteListing", { id });
-      refetch();
-    } catch (error) {
-      console.log("Error", error);
-    }
+    console.log("@handleDeleteListing", { id });
+    refetch();
   };
 
   const listings = data ? data.listings : null;
