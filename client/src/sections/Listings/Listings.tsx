@@ -3,11 +3,17 @@ import { gql } from 'apollo-boost';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 // import { useQuery, useMutation } from "../../lib/api";
 
+import { Alert, List, Avatar, Button, Spin } from 'antd';
+
+import { ListingsSkeleton } from './components/ListingsSkeleton';
+
 import { Listings as ListingsData } from './__generated__/Listings';
 import {
   DeleteListing as DeleteListingData,
   DeleteListingVariables,
 } from './__generated__/DeleteListing';
+
+import './styles/Listings.css';
 
 // NB: WE must name all our GraphQL requests!
 // For the Apollo code generator to pick up the GraphQL documents
@@ -51,7 +57,7 @@ export const Listings: FunctionComponent<IProps> = ({ title }: IProps) => {
   const handleDeleteListing = async (id: string) => {
     await deleteListing({ variables: { id } });
 
-    console.log('@handleDeleteListing', { id });
+    // console.log('@handleDeleteListing', { id });
     refetch();
   };
 
@@ -59,16 +65,28 @@ export const Listings: FunctionComponent<IProps> = ({ title }: IProps) => {
 
   const listingsList =
     listings && listings.length ? (
-      <ul>
-        {listings.map(({ id, title }) => (
-          <li key={id}>
-            {`${id}: ${title}`}
-            <button onClick={() => handleDeleteListing(id)}>
-              Delete Listing
-            </button>
-          </li>
-        ))}
-      </ul>
+      <List
+        itemLayout="horizontal"
+        dataSource={listings}
+        renderItem={listing => (
+          <List.Item
+            actions={[
+              <Button
+                type="primary"
+                onClick={() => handleDeleteListing(listing.id)}
+              >
+                Delete
+              </Button>,
+            ]}
+          >
+            <List.Item.Meta
+              title={listing.title}
+              description={listing.address}
+              avatar={<Avatar src={listing.image} shape="square" size={48} />}
+            />
+          </List.Item>
+        )}
+      />
     ) : (
       <div>
         <p>No Listings to show</p>
@@ -76,31 +94,36 @@ export const Listings: FunctionComponent<IProps> = ({ title }: IProps) => {
     );
 
   if (loading) {
-    return <h2>Loading...</h2>;
+    return (
+      <div className="listings">
+        <ListingsSkeleton title={title} />
+      </div>
+    );
   }
 
   if (error) {
-    return <h2>An Error occcured fetching data, please try again...</h2>;
+    return (
+      <div className="listings">
+        <ListingsSkeleton title={title} error />
+      </div>
+    );
   }
 
-  const deleteListingLoadingMessage = deleteListingLoading ? (
-    <h4>Deletion in progress...</h4>
-  ) : null;
-
-  const deleteListingErrorMessage = deleteListingError ? (
-    <h4>Deletion error, please try again.</h4>
+  const deleteListingErrorAlert = deleteListingError ? (
+    <Alert
+      type="error"
+      message="An Error occcured please try again..."
+      className="listings__alert"
+    />
   ) : null;
 
   return (
-    <div>
-      <h2>{title}</h2>
-      <div>
-        <h2>Listings</h2>
-
-        {listingsList}
-        {deleteListingLoadingMessage}
-        {deleteListingErrorMessage}
-      </div>
+    <div className="listings">
+      {deleteListingErrorAlert}
+      <Spin spinning={deleteListingLoading}>
+        <h2>{title}</h2>
+        <div>{listingsList}</div>
+      </Spin>
     </div>
   );
 };
