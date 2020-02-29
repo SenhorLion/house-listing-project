@@ -6,7 +6,7 @@
   "scripts": {
     "start": "nodemon src/index.ts",
     "start:local": "NODE_ENV=LOCAL nodemon src/index.ts",
-    "seed": "ts-node temp/seed.ts",
+    "seed": "ts-node seed-data/seed.ts",
     "seed:local": "NODE_ENV=LOCAL ts-node temp/seed.ts",
     "build": "tsc -p ./",
     "lint": "tsc --noEmit && eslint '*/**/*.{js,ts,tsx}' --quiet --fix",

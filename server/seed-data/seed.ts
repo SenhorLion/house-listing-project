@@ -4,6 +4,10 @@ import { ObjectId } from 'mongodb';
 import { connectDatabase } from '../src/database';
 import { IListing } from '../src/lib/types';
 
+// TODO: Seed Data
+// 1. Add Faker data 
+// 2. Accept an input number to determine how many to seed
+// 3. Create a factory method to construct listing data item
 export const listings: IListing[] = [
   {
     _id: new ObjectId(),
