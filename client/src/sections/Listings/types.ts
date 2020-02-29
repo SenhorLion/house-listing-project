@@ -1,3 +1,8 @@
+/**
+ * THIS CAN BE REMOVED
+ * USING __GENERATED_TYPES__ NOW
+ * BUT KEEP FOR LEARNING PURPOSES
+ */
 export interface Listing {
   id: string;
   title: string;

@@ -1,3 +1,7 @@
+/**
+ * THIS IS MARKED FOR REMOVAL
+ * ITS NO LONGER USED AS  WE USE THE React Apollo Library hooks useQuery
+ */
 import { useState, useEffect, useCallback, useReducer } from "react";
 import { server } from "./server";
 

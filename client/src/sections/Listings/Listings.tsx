@@ -1,13 +1,18 @@
-import React, { FunctionComponent } from "react";
-import { gql } from "apollo-boost";
-import { useQuery, useMutation } from "@apollo/react-hooks";
+import React, { FunctionComponent } from 'react';
+import { gql } from 'apollo-boost';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 // import { useQuery, useMutation } from "../../lib/api";
-import {
-  ListingsData,
-  DeleteListingData,
-  DeleteListingVariables
-} from "./types";
 
+import { Listings as ListingsData } from './__generated__/Listings';
+import {
+  DeleteListing as DeleteListingData,
+  DeleteListingVariables,
+} from './__generated__/DeleteListing';
+
+// NB: WE must name all our GraphQL requests!
+// For the Apollo code generator to pick up the GraphQL documents
+// and make static types that reference them, it requires us to name all our GraphQL requests,
+// E.g: query Listings { ... } as appears here:
 const LISTINGS = gql`
   query Listings {
     listings {
@@ -40,13 +45,13 @@ export const Listings: FunctionComponent<IProps> = ({ title }: IProps) => {
 
   const [
     deleteListing,
-    { loading: deleteListingLoading, error: deleteListingError }
+    { loading: deleteListingLoading, error: deleteListingError },
   ] = useMutation<DeleteListingData, DeleteListingVariables>(DELETE_LISTING);
 
   const handleDeleteListing = async (id: string) => {
     await deleteListing({ variables: { id } });
 
-    console.log("@handleDeleteListing", { id });
+    console.log('@handleDeleteListing', { id });
     refetch();
   };
 

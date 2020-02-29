@@ -1,3 +1,7 @@
+/**
+ * THIS IS MARKED FOR REMOVAL
+ * ITS NO LONGER USED AS  WE USE THE React Apollo Library hooks
+ */
 interface Body<TVariables> {
   query: string;
   variables?: TVariables;
