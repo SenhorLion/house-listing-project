@@ -10,6 +10,9 @@ App to show and share house listings [think Airbnb] using Node, Express, GraphQL
 - `npm run build` : run TypeScript build
 - `npm run seed` : to seed the MongoDB Cloud Atlas instance
 - `npm run seed:local` : to seed the local MongoDB instance
+
+_NB: you can pass a number to seed:_ `npm run seed -- --SEED_NUMBER=20`
+
 - `npm run start:local` : to run GraphQL server, using a local MongoDB
 - `npm run start` : to run GraphQL server, using MongoDB Cloud Atlas instance
 

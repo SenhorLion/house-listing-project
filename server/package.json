@@ -27,6 +27,7 @@
     "@types/body-parser": "^1.17.1",
     "@types/dotenv": "^8.2.0",
     "@types/express": "^4.17.2",
+    "@types/faker": "^4.1.10",
     "@types/lodash.merge": "^4.6.6",
     "@types/mongodb": "^3.3.15",
     "@types/node": "^13.7.0",
@@ -36,9 +37,11 @@
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.10.0",
     "eslint-plugin-prettier": "^3.1.2",
+    "faker": "^4.1.0",
     "nodemon": "^2.0.2",
     "prettier": "^1.19.1",
     "ts-node": "^8.6.2",
-    "typescript": "^3.7.5"
+    "typescript": "^3.7.5",
+    "yargs": "^15.1.0"
   }
 }
