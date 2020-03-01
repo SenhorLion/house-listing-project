@@ -1,7 +1,7 @@
 {
-  "name": "house-listing-project",
+  "name": "house-listings-server",
   "version": "1.0.0",
-  "description": "House listing server using Node and Express",
+  "description": "House listing server using Node, Express, GraphQL",
   "main": "index.js",
   "scripts": {
     "start": "nodemon src/index.ts",
