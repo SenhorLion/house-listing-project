@@ -3,7 +3,7 @@ import { gql } from 'apollo-boost';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 // import { useQuery, useMutation } from "../../lib/api";
 
-import { Alert, List, Avatar, Button, Spin } from 'antd';
+import { Alert, List, Avatar, Button, Spin, Typography } from 'antd';
 
 import { ListingsSkeleton } from './components/ListingsSkeleton';
 
@@ -15,6 +15,7 @@ import {
 
 import './styles/Listings.css';
 
+const { Title } = Typography;
 // NB: WE must name all our GraphQL requests!
 // For the Apollo code generator to pick up the GraphQL documents
 // and make static types that reference them, it requires us to name all our GraphQL requests,
@@ -65,28 +66,31 @@ export const Listings: FunctionComponent<IProps> = ({ title }: IProps) => {
 
   const listingsList =
     listings && listings.length ? (
-      <List
-        itemLayout="horizontal"
-        dataSource={listings}
-        renderItem={listing => (
-          <List.Item
-            actions={[
-              <Button
-                type="primary"
-                onClick={() => handleDeleteListing(listing.id)}
-              >
-                Delete
-              </Button>,
-            ]}
-          >
-            <List.Item.Meta
-              title={listing.title}
-              description={listing.address}
-              avatar={<Avatar src={listing.image} shape="square" size={48} />}
-            />
-          </List.Item>
-        )}
-      />
+      <div>
+        <Title level={4}>Showing {listings.length} listings</Title>
+        <List
+          itemLayout="horizontal"
+          dataSource={listings}
+          renderItem={listing => (
+            <List.Item
+              actions={[
+                <Button
+                  type="primary"
+                  onClick={() => handleDeleteListing(listing.id)}
+                >
+                  Delete
+                </Button>,
+              ]}
+            >
+              <List.Item.Meta
+                title={listing.title}
+                description={listing.address}
+                avatar={<Avatar src={listing.image} shape="square" size={48} />}
+              />
+            </List.Item>
+          )}
+        />
+      </div>
     ) : (
       <div>
         <p>No Listings to show</p>
@@ -121,7 +125,7 @@ export const Listings: FunctionComponent<IProps> = ({ title }: IProps) => {
     <div className="listings">
       {deleteListingErrorAlert}
       <Spin spinning={deleteListingLoading}>
-        <h2>{title}</h2>
+        <Title level={1}>{title}</Title>
         <div>{listingsList}</div>
       </Spin>
     </div>
