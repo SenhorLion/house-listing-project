@@ -4,6 +4,7 @@
   "description": "House listing server using Node, Express, GraphQL",
   "main": "index.js",
   "scripts": {
+    "check-env": "node -e 'console.log(process.env)' | grep npm",
     "start:prod": "nodemon src/index.ts",
     "start": "NODE_ENV=LOCAL nodemon src/index.ts",
     "seed:prod": "ts-node seed-data/seed.ts",

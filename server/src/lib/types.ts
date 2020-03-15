@@ -50,6 +50,14 @@ export interface IUser {
   listings: ObjectId[];
 }
 
+export interface IViewer {
+  _id?: string;
+  token?: string;
+  avatar?: string;
+  walletId?: string;
+  didRequest: boolean;
+}
+
 export interface IDatabase {
   bookings: Collection<IBooking>;
   listings: Collection<IListing>;
