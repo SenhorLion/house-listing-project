@@ -1,35 +1,60 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import ApolloClient from 'apollo-boost';
 import { ApolloProvider } from '@apollo/react-hooks';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { Home, Host, Listing, Listings, NotFound, User } from './sections';
+import { IViewer } from './lib/types';
+import {
+  Home,
+  Host,
+  Listing,
+  Listings,
+  NotFound,
+  User,
+  Login,
+} from './sections';
 
 import './styles/index.css';
 import * as serviceWorker from './serviceWorker';
+import { Layout } from 'antd';
 
 const client = new ApolloClient({
   uri: '/api',
 });
 
+const initialViewer: IViewer = {
+  id: null,
+  token: null,
+  avatar: null,
+  hasWallet: null,
+  didRequest: false,
+};
+
 const App = () => {
+  const [viewer, setViewer] = useState<IViewer>(initialViewer);
+
+  console.log({ viewer });
+
   return (
     <Router>
-      <Switch>
-        <Route exact path="/" component={Home}></Route>
-        <Route exact path="/host" component={Host}></Route>
-        <Route exact path="/listing/:id" component={Listing}></Route>
-        <Route exact path="/listings/:location?" component={Listings}></Route>
-        <Route exact path="/User" component={User}></Route>
-        <Route component={NotFound}></Route>
-      </Switch>
+      <Layout id="app">
+        <Switch>
+          <Route exact path="/" component={Home} />
+          <Route exact path="/host" component={Host} />
+          <Route exact path="/listing/:id" component={Listing} />
+          <Route exact path="/listings/:location?" component={Listings} />
+          <Route
+            exact
+            path="/login"
+            render={props => <Login {...props} setViewer={setViewer} />}
+          />
+          <Route exact path="/user/:id" component={User} />
+          <Route component={NotFound} />
+        </Switch>
+      </Layout>
     </Router>
   );
 };
-
-{
-  /* <Listings title="House Listings" /> */
-}
 
 ReactDOM.render(
   <ApolloProvider client={client}>

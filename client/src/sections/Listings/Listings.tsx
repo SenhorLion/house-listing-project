@@ -13,7 +13,7 @@ import {
   DeleteListingVariables,
 } from './__generated__/DeleteListing';
 
-import './styles/Listings.css';
+import './styles/Listings.css'
 
 const { Title } = Typography;
 // NB: WE must name all our GraphQL requests!
