@@ -2,12 +2,19 @@ import React from 'react';
 import { Layout } from 'antd';
 import { Link } from 'react-router-dom';
 
-import logo from './assets/tinyhouse-logo.png';
+import { IViewer } from '../../lib/types';
 import { MenuItems } from './components';
+
+import logo from './assets/tinyhouse-logo.png';
 
 const { Header } = Layout;
 
-export const AppHeader = () => {
+interface IProps {
+  viewer: IViewer;
+  setViewer: (viewer: IViewer) => void;
+}
+
+export const AppHeader = ({ viewer, setViewer }: IProps) => {
   return (
     <Header className="app-header">
       <div className="app-header__logo-search-section">
@@ -18,7 +25,7 @@ export const AppHeader = () => {
         </div>
       </div>
       <div className="app-header__menu-section">
-        <MenuItems />
+        <MenuItems viewer={viewer} setViewer={setViewer} />
       </div>
     </Header>
   );

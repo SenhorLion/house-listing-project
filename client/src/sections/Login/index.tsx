@@ -55,7 +55,6 @@ export const Login = ({ setViewer }: IProps) => {
   }, []);
 
   const handleAuthorize = async () => {
-    //useApolloClient
     try {
       const { data } = await client.query<AuthUrlData>({
         query: AUTH_URL,
