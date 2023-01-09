@@ -1,9 +1,15 @@
-import React, { useState } from 'react';
-import ReactDOM from 'react-dom';
+import { ApolloProvider, useMutation } from '@apollo/react-hooks';
+import { Affix, Layout, Spin } from 'antd';
 import ApolloClient from 'apollo-boost';
-import { ApolloProvider } from '@apollo/react-hooks';
+import React, { useEffect, useRef, useState } from 'react';
+import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { Affix, Layout } from 'antd';
+import { AppHeaderSkeleton, ErrorBanner } from './lib/components';
+import { LOG_IN } from './lib/graphql/mutations';
+import {
+  LogIn,
+  LogInVariables,
+} from './lib/graphql/mutations/LogIn/__generated__/LogIn';
 import { IViewer } from './lib/types';
 import {
   AppHeader,
@@ -11,13 +17,13 @@ import {
   Host,
   Listing,
   Listings,
+  Login,
   NotFound,
   User,
-  Login,
 } from './sections';
 
-import './styles/index.css';
 import * as serviceWorker from './serviceWorker';
+import './styles/index.css';
 
 const client = new ApolloClient({
   uri: '/api',
@@ -31,14 +37,43 @@ const initialViewer: IViewer = {
   didRequest: false,
 };
 
+// TODO: check login for viewer
 const App = () => {
   const [viewer, setViewer] = useState<IViewer>(initialViewer);
+  const [logIn, { error }] = useMutation<LogIn, LogInVariables>(LOG_IN, {
+    onCompleted: data => {
+      console.log('LOGGED IN');
+      if (data && data.logIn) {
+        setViewer(data.logIn);
+      }
+    },
+  });
 
-  console.log({ viewer });
+  const loginRef = useRef(logIn);
+
+  useEffect(() => {
+    loginRef.current();
+  }, []);
+
+  if (!viewer.didRequest && !error) {
+    return (
+      <Layout id="app-skeleton" className="app-skeleton">
+        <AppHeaderSkeleton />
+        <div className="app-skeleton__spin-section">
+          <Spin size="large" tip="Launching tinyhouse" />
+        </div>
+      </Layout>
+    );
+  }
+
+  const loginErrorBanner = error ? (
+    <ErrorBanner description="We weren't able to verify if you were logged in. Please try again later" />
+  ) : null;
 
   return (
     <Router>
-      <Layout id="app">
+      <Layout id="app" className="app-skeleton">
+        {loginErrorBanner}
         <Affix offsetTop={0} className="app__affix-header">
           <AppHeader viewer={viewer} setViewer={setViewer} />
         </Affix>

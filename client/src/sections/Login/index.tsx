@@ -1,12 +1,8 @@
-import React, { useEffect, useRef } from 'react';
-import { Redirect } from 'react-router';
 import { useApolloClient, useMutation } from '@apollo/react-hooks';
 import { Card, Layout, Spin, Typography } from 'antd';
+import React, { useEffect, useRef } from 'react';
+import { Redirect } from 'react-router';
 import { ErrorBanner } from '../../lib/components/';
-import {
-  displayErrorMessage,
-  displaySuccessNotification,
-} from '../../lib/utils';
 import { LOG_IN } from '../../lib/graphql/mutations';
 import {
   LogIn as LogInData,
@@ -15,6 +11,10 @@ import {
 import { AUTH_URL } from '../../lib/graphql/queries';
 import { AuthUrl as AuthUrlData } from '../../lib/graphql/queries/AuthUrl/__generated__/AuthUrl';
 import { IViewer } from '../../lib/types';
+import {
+  displayErrorMessage,
+  displaySuccessNotification,
+} from '../../lib/utils';
 // Image Assets
 import googleLogo from './assets/google_logo.jpg';
 
@@ -59,7 +59,6 @@ export const Login = ({ setViewer }: IProps) => {
       const { data } = await client.query<AuthUrlData>({
         query: AUTH_URL,
       });
-      console.log({ data });
 
       window.location.href = data.authUrl;
     } catch (error) {
