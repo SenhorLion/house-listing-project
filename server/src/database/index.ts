@@ -1,7 +1,7 @@
 require('dotenv').config;
 
 import { MongoClient } from 'mongodb';
-import { IDatabase, IUser, IListing, IBooking } from '../lib/types';
+import { IBooking, IDatabase, IListing, IUser } from '../lib/types';
 
 // TODO: Improve environment variabe management
 const { DB_USER, DB_USER_PASSWORD, DB_CLUSTER, DB_NAME, LOCAL_MONGO_URL } = process.env;
@@ -18,7 +18,6 @@ if (process.env.NODE_ENV === 'LOCAL') {
 
 console.log('=====\nConfig for', process.env.NODE_ENV);
 console.log('DB: ', dbName);
-// console.log('DB_COLLECTION: ', dbCollection);
 
 export const connectDatabase = async (): Promise<IDatabase> => {
   const client = await MongoClient.connect(url, {
