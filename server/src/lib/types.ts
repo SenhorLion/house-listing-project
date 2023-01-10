@@ -48,6 +48,7 @@ export interface IUser {
   income: number;
   bookings: ObjectId[];
   listings: ObjectId[];
+  authorized?: boolean;
 }
 
 export interface IViewer {
