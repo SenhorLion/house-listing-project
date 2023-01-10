@@ -4,3 +4,5 @@ build/
 .env
 
 npm-debug.log*
+
+_resources/client_secret_697914242911-gb9im22mjgivusf48ihhcqu4lnn0mski.apps.googleusercontent.com.json
