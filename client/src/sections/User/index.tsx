@@ -7,12 +7,20 @@ import {
   User as UserData,
   UserVariables,
 } from '../../lib/graphql/queries/User/__generated__/User';
+import { IViewer } from '../../lib/types';
+import { UserProfile } from './components';
 
 interface IUserProps {
+  viewer: IViewer;
+}
+interface MatchParams {
   id: string;
 }
 // TODO: Use react-router hooks to get id param
-export const User = ({ match }: RouteComponentProps<IUserProps>) => {
+export const User = ({
+  match,
+  viewer,
+}: IUserProps & RouteComponentProps<MatchParams>) => {
   // const { id } = useParams();
   const { Content } = Layout;
   const {
@@ -26,14 +34,17 @@ export const User = ({ match }: RouteComponentProps<IUserProps>) => {
   });
 
   console.log({ data });
+  console.log({ viewer });
 
   const user = data && data?.user ? data.user : null;
-  const userProfileElement = user ? <h2>USER</h2> : null;
+  const viewerIsUser = viewer?.id === id;
 
   return (
     <Content className="user">
-      <Row gutter={12} type="flex" justify="space-between">
-        <Col xs={24}>{userProfileElement}</Col>
+      <Row gutter={12} justify="space-between">
+        <Col xs={24}>
+          <UserProfile user={user} viewerIsUser={viewerIsUser} />
+        </Col>
       </Row>
     </Content>
   );

@@ -45,7 +45,6 @@ const initialViewer: IViewer = {
   didRequest: false,
 };
 
-// TODO: check login for viewer
 const App = () => {
   const [viewer, setViewer] = useState<IViewer>(initialViewer);
   const [logIn, { error }] = useMutation<LogIn, LogInVariables>(LOG_IN, {
@@ -101,7 +100,11 @@ const App = () => {
             path="/login"
             render={props => <Login {...props} setViewer={setViewer} />}
           />
-          <Route exact path="/user/:id" component={User} />
+          <Route
+            exact
+            path="/user/:id"
+            render={props => <User {...props} viewer={viewer} />}
+          />
           <Route component={NotFound} />
         </Switch>
       </Layout>
