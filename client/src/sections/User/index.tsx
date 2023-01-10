@@ -2,6 +2,7 @@ import { useQuery } from '@apollo/react-hooks';
 import { Col, Layout, Row } from 'antd';
 import React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
+import { ErrorBanner, PageSkeleton } from '../../lib/components';
 import { USER } from '../../lib/graphql/queries';
 import {
   User as UserData,
@@ -33,8 +34,23 @@ export const User = ({
     },
   });
 
-  console.log({ data });
-  console.log({ viewer });
+  console.log({ loading }, { error });
+
+  if (loading) {
+    return (
+      <Content className="user">
+        <PageSkeleton />
+      </Content>
+    );
+  }
+
+  if (error) {
+    return (
+      <Content className="user">
+        <ErrorBanner description="This user may not exist or we've encountered an error. Please try again soon." />
+      </Content>
+    );
+  }
 
   const user = data && data?.user ? data.user : null;
   const viewerIsUser = viewer?.id === id;
